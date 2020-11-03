@@ -55,7 +55,7 @@ fn next_token(source: &mut Peekable<Chars>) -> Option<Tokens> {
 		Some(' ') => Whitespace,
 
 		None => return None,
-		_ => panic!("wtf is this"),
+		_ => panic!("unknown character"),
 	})
 }
 
@@ -118,15 +118,15 @@ fn parse(
 			left
 		},
 		Some(Tokens::Add) => {
-			let &(prec, ass) = prefix.get(&Tokens::Add).expect("no bueno 1");
+			let &(prec, ass) = prefix.get(&Tokens::Add).expect("expected add");
 			parse(tokens, table, prec + ass)
 		},
 		Some(Tokens::Sub) => {
-			let &(prec, ass) = prefix.get(&Tokens::Sub).expect("no bueno2 ");
+			let &(prec, ass) = prefix.get(&Tokens::Sub).expect("expected sub");
 			-parse(tokens, table, prec + ass)
 		},
 		Some(Literal(string)) => string.parse::<f32>().unwrap(),
-		_ => unreachable!("sdoifhdsfh"),
+		_ => unreachable!("unreachable case"),
 	};
 
 
@@ -143,7 +143,7 @@ fn parse(
 				Mul => left * parse(tokens, table, prec + ass),
 				Div => left / parse(tokens, table, prec + ass),
 				Pow => left.powf(parse(tokens, table, prec + ass)),
-				_ => unreachable!("nox has a not ass"),
+				_ => unreachable!("unreachable case"),
 			};
 
 		} else {
